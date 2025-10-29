@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🎂 Happy Birthday Gunnu 🎀</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+  body{
+    overflow:hidden;
+    background:linear-gradient(135deg,#ffd6e7,#fff0f7);
+    height:100vh;width:100vw;
+    display:flex;align-items:center;justify-content:center;
+    flex-direction:column;position:relative;
+  }
+  .hearts{
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    overflow:hidden;z-index:0;
+  }
+  .hearts span{
+    position:absolute;display:block;width:20px;height:20px;
+    background:rgba(255,0,128,0.4);
+    transform:rotate(45deg);
+    animation:fall 6s linear infinite;
+  }
+  .hearts span::before,.hearts span::after{
+    content:'';position:absolute;width:20px;height:20px;
+    background:rgba(255,0,128,0.4);border-radius:50%;
+  }
+  .hearts span::before{top:-10px;left:0;}
+  .hearts span::after{top:0;left:-10px;}
+  @keyframes fall{
+    0%{transform:translateY(-10%) rotate(45deg);opacity:1;}
+    100%{transform:translateY(110vh) rotate(45deg);opacity:0;}
+  }
+
+  .popup{
+    position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:90%;max-width:380px;background:rgba(255,255,255,0.9);
+    border-radius:25px;padding:30px 25px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.1);
+    text-align:center;z-index:2;animation:bounceIn 1s ease;
+  }
+  @keyframes bounceIn{
+    0%{transform:translate(-50%,60%) scale(0.8);opacity:0;}
+    60%{transform:translate(-50%,-40%) scale(1.05);opacity:1;}
+    100%{transform:translate(-50%,-50%) scale(1);}
+  }
+  .popup h1{color:#ff4da6;font-size:1.9em;margin-bottom:8px;}
+  .popup p{color:#ff66b2;font-size:1em;}
+  .popup button{
+    margin-top:20px;background:#ff66b2;border:none;color:white;
+    padding:12px 28px;border-radius:30px;cursor:pointer;
+    font-size:1.1em;transition:0.3s;
+  }
+  .popup button:hover{background:#ff3399;}
+
+  .gallery{
+    display:none;flex-wrap:wrap;justify-content:center;
+    align-items:flex-start;gap:12px;padding:20px;
+    overflow-y:auto;height:100vh;z-index:1;
+  }
+  .gallery img,.gallery video{
+    width:90%;max-width:260px;border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .gallery img:hover,.gallery video:hover{
+    transform:scale(1.05);
+    box-shadow:0 10px 25px rgba(255,105,180,0.4);
+  }
+  @media(min-width:768px){.gallery img,.gallery video{width:28%;}}
+
+  .quote{
+    width:100%;text-align:center;color:#ff4da6;
+    font-style:italic;font-size:1.1em;margin:10px 0;
+  }
+  .outro{
+    width:100%;text-align:center;margin:40px 0;
+    font-size:1.3em;color:#ff3399;opacity:0;
+    transition:opacity 1.5s ease;
+  }
+</style>
+</head>
+<body>
+<div class="hearts"></div>
+
+<audio id="bgMusic" autoplay loop>
+  <source src="birthday-lofi.mp3" type="audio/mpeg">
+</audio>
+
+<div class="popup" id="popup">
+  <h1>🎂 Happy Birthday Gunnu 🎀</h1>
+  <p>Aaj ke special din par bahut bahut शुभकामनाएं 💖</p>
+  <p>Bas tum ase hi muskurati rehna, duniya thodi si pyaari lagti hai 💕</p>
+  <button id="celebrateBtn">Click to Celebrate 🎉</button>
+</div>
+
+<div class="gallery" id="gallery">
+  <img src="1.jpg" alt="">
+  <img src="2.jpg" alt="">
+  <p class="quote">“Tera smile hi toh reason hai sab kuchh acha lagne ka ☀️”</p>
+  <img src="3.jpg" alt="">
+  <img src="4.jpg" alt="">
+  <p class="quote">“Tu hai toh sab kuch soft, calm aur thoda sa dreamy lagta hai 💫”</p>
+  <img src="5.jpg" alt="">
+  <img src="6.jpg" alt="">
+  <img src="7.jpg" alt="">
+  <video src="11.mp4" controls></video>
+  <p class="quote">“Bas aise hi rehna, thodi si shaitaan… thodi si cutest 💞”</p>
+  <img src="8.jpg" alt="">
+  <img src="9.jpg" alt="">
+    <div class="outro" id="outro">💖 Thank you for being you — always special 💖</div>
+
+</div>
+
+<canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;"></canvas>
+
+<script>
+  const heartsContainer=document.querySelector('.hearts');
+  for(let i=0;i<15;i++){
+    let span=document.createElement('span');
+    span.style.left=Math.random()*100+'%';
+    span.style.animationDelay=Math.random()*3+'s';
+    span.style.width=15+Math.random()*10+'px';
+    span.style.height=15+Math.random()*10+'px';
+    heartsContainer.appendChild(span);
+  }
+
+  const popup=document.getElementById('popup');
+  const gallery=document.getElementById('gallery');
+  const btn=document.getElementById('celebrateBtn');
+  const bgMusic=document.getElementById('bgMusic');
+  const outro=document.getElementById('outro');
+
+  window.addEventListener('load',()=>{
+    bgMusic.volume=0;
+    const target=0.6;
+    const fade=target/30;
+    bgMusic.play().then(()=>{
+      const fadeIn=setInterval(()=>{
+        if(bgMusic.volume<target){
+          bgMusic.volume=Math.min(bgMusic.volume+fade, target);
+        } else clearInterval(fadeIn);
+      },100);
+    }).catch(()=>{
+      document.body.addEventListener('click',()=>{bgMusic.play();},{once:true});
+    });
+  });
+
+  const confettiCanvas=document.getElementById('confettiCanvas');
+  const ctx=confettiCanvas.getContext('2d');
+  let confettis=[];
+  function resizeCanvas(){
+    confettiCanvas.width=window.innerWidth;
+    confettiCanvas.height=window.innerHeight;
+  }
+  window.addEventListener('resize',resizeCanvas);
+  resizeCanvas();
+
+  function randomColor(){
+    const colors=['#ff4da6','#ff66b2','#ff99cc','#ff3385','#ff80bf'];
+    return colors[Math.floor(Math.random()*colors.length)];
+  }
+  function createConfetti(){
+    for(let i=0;i<150;i++){
+      confettis.push({
+        x:Math.random()*confettiCanvas.width,
+        y:Math.random()*confettiCanvas.height-confettiCanvas.height,
+        w:6,h:8,color:randomColor(),
+        speed:Math.random()*3+2,rotate:Math.random()*360
+      });
+    }
+  }
+  function drawConfetti(){
+    ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+    confettis.forEach(c=>{
+      ctx.fillStyle=c.color;
+      ctx.save();
+      ctx.translate(c.x,c.y);
+      ctx.rotate(c.rotate*Math.PI/180);
+      ctx.fillRect(-c.w/2,-c.h/2,c.w,c.h);
+      ctx.restore();
+      c.y+=c.speed;
+      c.rotate+=c.speed;
+      if(c.y>confettiCanvas.height){c.y=-10;}
+    });
+    requestAnimationFrame(drawConfetti);
+  }
+
+  btn.addEventListener('click',()=>{
+    popup.style.opacity='0';
+    setTimeout(()=>{
+      popup.style.display='none';
+      document.body.style.overflow='auto';
+      gallery.style.display='flex';
+      createConfetti();
+      drawConfetti();
+    },800);
+  });
+
+  // Show outro when scrolled to end
+  gallery.addEventListener('scroll',()=>{
+    if(gallery.scrollTop + gallery.clientHeight >= gallery.scrollHeight - 50){
+      outro.style.opacity='1';
+    }
+  });
+</script>
+</body>
+</html>
