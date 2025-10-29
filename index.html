@@ -85,7 +85,8 @@
 <body>
 <div class="hearts"></div>
 
-<audio id="bgMusic" autoplay loop>
+<!-- 🔊 Background music -->
+<audio id="bgMusic" loop>
   <source src="birthday-lofi.mp3" type="audio/mpeg">
 </audio>
 
@@ -110,13 +111,13 @@
   <p class="quote">“Bas aise hi rehna, thodi si shaitaan… thodi si cutest 💞”</p>
   <img src="8.jpg" alt="">
   <img src="9.jpg" alt="">
-    <div class="outro" id="outro">💖 Thank you for being you — always special 💖</div>
-
+  <div class="outro" id="outro">💖 Thank you for being you — always special 💖</div>
 </div>
 
 <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;"></canvas>
 
 <script>
+  // Floating hearts
   const heartsContainer=document.querySelector('.hearts');
   for(let i=0;i<15;i++){
     let span=document.createElement('span');
@@ -133,21 +134,30 @@
   const bgMusic=document.getElementById('bgMusic');
   const outro=document.getElementById('outro');
 
-  window.addEventListener('load',()=>{
-    bgMusic.volume=0;
-    const target=0.6;
-    const fade=target/30;
-    bgMusic.play().then(()=>{
-      const fadeIn=setInterval(()=>{
-        if(bgMusic.volume<target){
-          bgMusic.volume=Math.min(bgMusic.volume+fade, target);
-        } else clearInterval(fadeIn);
-      },100);
-    }).catch(()=>{
-      document.body.addEventListener('click',()=>{bgMusic.play();},{once:true});
-    });
+  // 🎶 Start on button click (works for all browsers)
+  btn.addEventListener('click',()=>{
+    popup.style.opacity='0';
+    setTimeout(()=>{
+      popup.style.display='none';
+      document.body.style.overflow='auto';
+      gallery.style.display='flex';
+
+      // Play music after click with fade-in
+      bgMusic.volume=0;
+      bgMusic.play().then(()=>{
+        const fadeIn=setInterval(()=>{
+          if(bgMusic.volume<0.6){
+            bgMusic.volume=Math.min(bgMusic.volume+0.02,0.6);
+          } else clearInterval(fadeIn);
+        },150);
+      });
+
+      createConfetti();
+      drawConfetti();
+    },800);
   });
 
+  // 💥 Confetti effect
   const confettiCanvas=document.getElementById('confettiCanvas');
   const ctx=confettiCanvas.getContext('2d');
   let confettis=[];
@@ -163,7 +173,8 @@
     return colors[Math.floor(Math.random()*colors.length)];
   }
   function createConfetti(){
-    for(let i=0;i<150;i++){
+    confettis=[];
+    for(let i=0;i<100;i++){
       confettis.push({
         x:Math.random()*confettiCanvas.width,
         y:Math.random()*confettiCanvas.height-confettiCanvas.height,
@@ -188,18 +199,7 @@
     requestAnimationFrame(drawConfetti);
   }
 
-  btn.addEventListener('click',()=>{
-    popup.style.opacity='0';
-    setTimeout(()=>{
-      popup.style.display='none';
-      document.body.style.overflow='auto';
-      gallery.style.display='flex';
-      createConfetti();
-      drawConfetti();
-    },800);
-  });
-
-  // Show outro when scrolled to end
+  // 🌸 Show outro when scrolled to end
   gallery.addEventListener('scroll',()=>{
     if(gallery.scrollTop + gallery.clientHeight >= gallery.scrollHeight - 50){
       outro.style.opacity='1';
